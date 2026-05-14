@@ -1,0 +1,6 @@
+stages:
+  - test
+  - lint
+include:
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.5.0
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.5.0
