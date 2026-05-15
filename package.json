@@ -19,6 +19,6 @@
     "prepublishOnly": "pnpm validate && pnpm build"
   },
   "devDependencies": {
-    "js-yaml": "^4.1.0"
+    "js-yaml": "4.1.1"
   }
 }

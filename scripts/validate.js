@@ -18,7 +18,9 @@ const args = process.argv.slice(2);
 const palettesDirIdx = args.indexOf('--palettes-dir');
 const PALETTES_DIR = palettesDirIdx >= 0
   ? path.resolve(args[palettesDirIdx + 1])
-  : path.resolve(__dirname, '../../palettes/src');
+  : process.env.CHROMAGOTH_PALETTES_DIR
+    ? path.resolve(process.env.CHROMAGOTH_PALETTES_DIR)
+    : path.resolve(__dirname, '../../palettes/src');
 
 let errors = 0;
 
