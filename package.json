@@ -1,7 +1,7 @@
 {
   "name": "@patrick.pfenning.92/chromagoth-css",
   "version": "0.1.0",
-  "description": "Chromagoth CSS custom properties — 11 goth theme variants",
+  "description": "Chromagoth CSS custom properties \u2014 11 goth theme variants",
   "license": "MIT",
   "packageManager": "pnpm@9.15.4",
   "files": [
