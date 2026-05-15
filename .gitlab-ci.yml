@@ -27,3 +27,22 @@ publish:npm:
     - CHROMAGOTH_PALETTES_DIR=/tmp/palettes/src pnpm publish --no-git-checks
   rules:
     - if: $CI_COMMIT_TAG
+
+publish:npm:dev:
+  extends: .pnpm
+  stage: publish
+  script:
+    - git clone --depth 1
+        "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/patrick.pfenning.92/chromagoth/palettes.git"
+        /tmp/palettes
+    - |
+      echo "@patrick.pfenning.92:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
+      echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - |
+      BASE="$(grep '"version"' package.json | head -1 | sed 's/.*"\([0-9][^"]*\)".*/\1/' | cut -d- -f1)"
+      DEV_VERSION="${BASE}-dev.${CI_PIPELINE_IID}"
+      sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"${DEV_VERSION}\"/" package.json
+    - CHROMAGOTH_PALETTES_DIR=/tmp/palettes/src pnpm publish --no-git-checks --tag dev
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_TAG == null
+      when: manual
