@@ -1,6 +1,32 @@
 stages:
   - test
   - lint
+  - publish
+
 include:
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.5.0
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.5.0
+
+.pnpm:
+  image: node:lts-alpine
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@9.15.4 --activate
+    - pnpm install --frozen-lockfile
+
+validate:
+  extends: .pnpm
+  stage: test
+  script:
+    - pnpm validate
+
+publish:npm:
+  extends: .pnpm
+  stage: publish
+  script:
+    - |
+      echo "@patrick.pfenning.92:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
+      echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
+    - pnpm publish --no-git-checks
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

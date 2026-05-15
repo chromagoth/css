@@ -1,0 +1,24 @@
+{
+  "name": "@patrick.pfenning.92/chromagoth-css",
+  "version": "0.1.0",
+  "description": "Chromagoth CSS custom properties — 11 goth theme variants",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.4",
+  "files": [
+    "dist/"
+  ],
+  "exports": {
+    ".": "./dist/chromagoth.css",
+    "./dist/chromagoth.css": "./dist/chromagoth.css",
+    "./dist/palettes.json": "./dist/palettes.json",
+    "./dist/palettes.js": "./dist/palettes.js"
+  },
+  "scripts": {
+    "build": "node scripts/generate.js",
+    "validate": "node scripts/validate.js",
+    "prepublishOnly": "pnpm validate && pnpm build"
+  },
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

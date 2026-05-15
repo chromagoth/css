@@ -1,0 +1,18 @@
+[data-theme="bubble"] {
+  --ground: #fbfcff;
+  --veil: #f1f5ff;
+  --field: #e2e8f5;
+  --trace: #c8d1e5;
+  --ash: #6a6c70;
+  --mist: #4f5b74;
+  --haze: #303b52;
+  --graphite: #171d2d;
+  --circuit-lime: #88c60a;
+  --powder-blush: #ef7f77;
+  --static-mint: #00bfb5;
+  --laser-blue: #1255e0;
+  --cyber-pink: #e63b8f;
+  --ultraviolet: #6f48f8;
+  --amber-glow: #d88b00;
+  --cherry-flux: #d63b59;
+}
