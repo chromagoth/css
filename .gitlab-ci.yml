@@ -45,4 +45,3 @@ publish:npm:dev:
     - CHROMAGOTH_PALETTES_DIR=/tmp/palettes/src pnpm publish --no-git-checks --tag dev
   rules:
     - if: $CI_COMMIT_BRANCH && $CI_COMMIT_TAG == null
-      when: manual
