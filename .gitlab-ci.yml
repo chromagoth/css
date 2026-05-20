@@ -13,6 +13,11 @@ stages:
 include:
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.6.0
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@feat/npm-publish
+    with:
+      scope: "@chromagoth"
+      nightly: on_success
+      dev: manual
 
 build:
   image:
@@ -24,50 +29,3 @@ build:
   artifacts:
     paths:
       - dist/
-
-.npm-auth:
-  stage: publish
-  image: node:lts-alpine
-  needs: [build]
-  before_script:
-    - corepack enable
-    - printf '@chromagoth:registry=https://%s/api/v4/packages/npm/\n' "$CI_SERVER_HOST" > .npmrc
-    - printf '//%s/api/v4/packages/npm/:_authToken=%s\n' "$CI_SERVER_HOST" "$CI_JOB_TOKEN" >> .npmrc
-
-publish:npm:nightly:
-  extends: .npm-auth
-  before_script:
-    - !reference [.npm-auth, before_script]
-    - npm pkg set version="0.0.0-nightly.$(date -u +%Y%m%d%H%M%S)"
-  script:
-    - pnpm publish --no-git-checks --ignore-scripts --tag nightly
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-
-publish:npm:dev:
-  extends: .npm-auth
-  before_script:
-    - !reference [.npm-auth, before_script]
-    - npm pkg set version="0.0.0-dev.$CI_COMMIT_SHORT_SHA"
-  script:
-    - pnpm publish --no-git-checks --ignore-scripts --tag dev
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: never
-    - if: $RELEASE_DEV == "true"
-    - when: manual
-
-publish:npm:
-  extends: .npm-auth
-  before_script:
-    - !reference [.npm-auth, before_script]
-    - npm pkg set version="$CI_COMMIT_TAG"
-  script:
-    - |
-      if printf '%s' "$CI_COMMIT_TAG" | grep -q -- '-'; then
-        pnpm publish --no-git-checks --ignore-scripts --tag rc
-      else
-        pnpm publish --no-git-checks --ignore-scripts --tag latest
-      fi
-  rules:
-    - if: $CI_COMMIT_TAG
