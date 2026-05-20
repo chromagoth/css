@@ -5,6 +5,7 @@ workflow:
     - when: always
 
 stages:
+  - test
   - lint
   - build
   - publish
