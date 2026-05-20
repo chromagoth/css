@@ -14,18 +14,6 @@ include:
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.6.0
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
 
-validate:tag:
-  stage: .pre
-  image: alpine:latest
-  script:
-    - |
-      if ! printf '%s' "$CI_COMMIT_TAG" | grep -qE '^[0-9]{4}\.[0-9]{1,2}\.[0-9]{1,2}\.[0-9]+(-[a-zA-Z0-9][a-zA-Z0-9.-]*)?$'; then
-        printf 'ERROR: tag "%s" must match YYYY.M.D.N[-suffix]\n' "$CI_COMMIT_TAG"
-        exit 1
-      fi
-  rules:
-    - if: $CI_COMMIT_TAG
-
 build:
   image:
     name: registry.gitlab.com/patrick.pfenning.92/chromagoth/palettes:main
