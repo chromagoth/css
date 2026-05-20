@@ -1,47 +1,49 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - when: always
+
 stages:
   - lint
-  - test
+  - build
   - publish
 
 include:
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.5.0
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.5.0
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
 
-.pnpm:
-  image: node:lts-alpine
+.chromagoth-binary:
+  image:
+    name: quay.io/buildah/stable:v1.42.0
+    entrypoint: [""]
   before_script:
-    - corepack enable
-    - corepack prepare pnpm@9.15.4 --activate
-    - pnpm install --frozen-lockfile
+    - buildah login --username $CI_REGISTRY_USER --password $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - ctr=$(buildah from registry.gitlab.com/patrick.pfenning.92/chromagoth/palettes:main)
+    - mnt=$(buildah mount "$ctr")
+    - cp "$mnt/chromagoth" /usr/local/bin/chromagoth
+    - buildah umount "$ctr"
+    - buildah rm "$ctr"
+    - chmod +x /usr/local/bin/chromagoth
+
+build:
+  extends: .chromagoth-binary
+  stage: build
+  script:
+    - chromagoth render
+  artifacts:
+    paths:
+      - dist/
 
 publish:npm:
-  extends: .pnpm
   stage: publish
+  image: node:lts-alpine
+  needs: [build]
+  before_script:
+    - corepack enable
+    - printf '@chromagoth:registry=https://%s/api/v4/packages/npm/\n' "$CI_SERVER_HOST" > .npmrc
+    - printf '//%s/api/v4/packages/npm/:_authToken=%s\n' "$CI_SERVER_HOST" "$CI_JOB_TOKEN" >> .npmrc
+    - VERSION="${CI_COMMIT_TAG#v}" && pnpm version --no-git-tag-version "$VERSION"
   script:
-    - git clone --depth 1
-        "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/patrick.pfenning.92/chromagoth/palettes.git"
-        /tmp/palettes
-    - |
-      echo "@patrick.pfenning.92:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
-      echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
-    - CHROMAGOTH_PALETTES_DIR=/tmp/palettes/src pnpm publish --no-git-checks
+    - pnpm publish --no-git-checks --ignore-scripts
   rules:
     - if: $CI_COMMIT_TAG
-
-publish:npm:dev:
-  extends: .pnpm
-  stage: publish
-  script:
-    - git clone --depth 1
-        "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/patrick.pfenning.92/chromagoth/palettes.git"
-        /tmp/palettes
-    - |
-      echo "@patrick.pfenning.92:registry=https://${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" > .npmrc
-      echo "//${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" >> .npmrc
-    - |
-      BASE="$(grep '"version"' package.json | head -1 | sed 's/.*"\([0-9][^"]*\)".*/\1/' | cut -d- -f1)"
-      DEV_VERSION="${BASE}-dev.${CI_PIPELINE_IID}"
-      sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"${DEV_VERSION}\"/" package.json
-    - CHROMAGOTH_PALETTES_DIR=/tmp/palettes/src pnpm publish --no-git-checks --tag dev
-  rules:
-    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_TAG == null

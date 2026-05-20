@@ -1,0 +1,23 @@
+[port]
+name = "css"
+description = "CSS custom properties, SCSS, and LESS for all Chromagoth variants"
+
+[[render]]
+template = "chromagoth.css.tmpl"
+output = "dist/chromagoth.css"
+per_variant = false
+
+[[render]]
+template = "theme.css.tmpl"
+output = "dist/themes/chromagoth-{{ .variant }}.css"
+per_variant = true
+
+[[render]]
+template = "chromagoth.scss.tmpl"
+output = "dist/chromagoth.scss"
+per_variant = false
+
+[[render]]
+template = "chromagoth.less.tmpl"
+output = "dist/chromagoth.less"
+per_variant = false
