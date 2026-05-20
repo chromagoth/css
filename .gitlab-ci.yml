@@ -14,7 +14,7 @@ include:
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.6.0
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@feat/npm-publish
-    with:
+    inputs:
       scope: "@chromagoth"
       nightly: on_success
       dev: manual
