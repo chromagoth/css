@@ -61,12 +61,7 @@ publish:npm:
   extends: .npm-auth
   before_script:
     - !reference [.npm-auth, before_script]
-    - |
-      _t="$CI_COMMIT_TAG"
-      _y="${_t%%.*}"; _r="${_t#*.}"
-      _m="${_r%%.*}"; _r="${_r#*.}"
-      _d="${_r%%.*}"; _r="${_r#*.}"
-      npm pkg set version="${_y}.$((10#$_m * 100 + 10#$_d)).${_r}"
+    - npm pkg set version="$CI_COMMIT_TAG"
   script:
     - |
       if printf '%s' "$CI_COMMIT_TAG" | grep -q -- '-'; then
@@ -75,6 +70,4 @@ publish:npm:
         pnpm publish --no-git-checks --ignore-scripts --tag latest
       fi
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^[0-9]{4}\.[0-9]+\.[0-9]+\.[0-9]+-/'
     - if: $CI_COMMIT_TAG
-      when: manual
