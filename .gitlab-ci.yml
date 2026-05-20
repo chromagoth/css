@@ -16,7 +16,7 @@ include:
 
 build:
   image:
-    name: registry.gitlab.com/patrick.pfenning.92/chromagoth/palettes:main
+    name: registry.gitlab.com/patrick.pfenning.92/chromagoth/palettes:feat-init
     entrypoint: [""]
   stage: build
   script:
