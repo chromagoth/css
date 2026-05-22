@@ -13,15 +13,16 @@ stages:
 include:
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.6.0
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@feat/npm-publish
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@0.9.0
     inputs:
       scope: "@chromagoth"
-      nightly: on_success
-      dev: manual
+      registry: gitlab
+      registry_uri: $CI_SERVER_HOST/api/v4/projects/$CI_PROJECT_ID/packages/npm/
+      token: $CI_JOB_TOKEN
 
 build:
   image:
-    name: registry.gitlab.com/patrick.pfenning.92/chromagoth/palettes:feat-init
+    name: registry.gitlab.com/chromagoth/palettes:0.1.1
     entrypoint: [""]
   stage: build
   script:
