@@ -1,6 +1,31 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - when: always
+
 stages:
   - test
   - lint
+  - build
+  - publish
+
 include:
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.5.0
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.5.0
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.6.0
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@feat/npm-publish
+    inputs:
+      scope: "@chromagoth"
+      nightly: on_success
+      dev: manual
+
+build:
+  image:
+    name: registry.gitlab.com/patrick.pfenning.92/chromagoth/palettes:feat-init
+    entrypoint: [""]
+  stage: build
+  script:
+    - chromagoth render
+  artifacts:
+    paths:
+      - dist/

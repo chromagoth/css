@@ -1,0 +1,19 @@
+{
+  "name": "@chromagoth/css",
+  "version": "0.1.0",
+  "description": "Chromagoth CSS custom properties, SCSS, and LESS for all theme variants",
+  "license": "MIT",
+  "files": [
+    "dist/"
+  ],
+  "exports": {
+    ".": "./dist/chromagoth.css",
+    "./scss": "./dist/chromagoth.scss",
+    "./less": "./dist/chromagoth.less",
+    "./themes/*": "./dist/themes/chromagoth-*.css"
+  },
+  "scripts": {
+    "build": "chromagoth render",
+    "prepublishOnly": "chromagoth render"
+  }
+}
