@@ -1,0 +1,10 @@
+{
+  "name": "@chromagoth/css",
+  "version": "0.1.0",
+  "exports": {
+    ".": "./dist/chromagoth.css",
+    "./scss": "./dist/chromagoth.scss",
+    "./less": "./dist/chromagoth.less",
+    "./themes/*": "./dist/themes/chromagoth-*.css"
+  }
+}
