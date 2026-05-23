@@ -13,12 +13,28 @@ stages:
 include:
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.6.0
   - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@0.9.0
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@0.10.0
     inputs:
       scope: "@chromagoth"
       registry: gitlab
       registry_uri: $CI_SERVER_HOST/api/v4/projects/$CI_PROJECT_ID/packages/npm/
       token: $CI_JOB_TOKEN
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@0.10.0
+    inputs:
+      scope: "@chromagoth"
+      registry: github
+      registry_uri: npm.pkg.github.com/
+      token: $GH_TOKEN_CLASSIC
+  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/jsr-publish@feat/jsr-publish
+
+# dev publishes only to GitLab — GitHub and JSR require protected vars
+'publish:npm:dev:github':
+  rules:
+    - when: never
+
+publish:jsr:dev:
+  rules:
+    - when: never
 
 build:
   image:
