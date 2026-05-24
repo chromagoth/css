@@ -5,6 +5,16 @@
     ".": "./dist/chromagoth.css",
     "./scss": "./dist/chromagoth.scss",
     "./less": "./dist/chromagoth.less",
-    "./themes/*": "./dist/themes/chromagoth-*.css"
+    "./themes/corpo": "./dist/themes/chromagoth-corpo.css",
+    "./themes/cyber": "./dist/themes/chromagoth-cyber.css",
+    "./themes/health": "./dist/themes/chromagoth-health.css",
+    "./themes/lolita": "./dist/themes/chromagoth-lolita.css",
+    "./themes/military": "./dist/themes/chromagoth-military.css",
+    "./themes/pastel": "./dist/themes/chromagoth-pastel.css",
+    "./themes/perky": "./dist/themes/chromagoth-perky.css",
+    "./themes/retro": "./dist/themes/chromagoth-retro.css",
+    "./themes/romantic": "./dist/themes/chromagoth-romantic.css",
+    "./themes/soft": "./dist/themes/chromagoth-soft.css",
+    "./themes/vampiric": "./dist/themes/chromagoth-vampiric.css"
   }
 }
