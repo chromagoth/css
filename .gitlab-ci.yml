@@ -25,14 +25,8 @@ include:
       registry: github
       registry_uri: npm.pkg.github.com/
       token: $GH_TOKEN_CLASSIC
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/jsr-publish@feat/jsr-publish
-
-# dev publishes only to GitLab — GitHub and JSR require protected vars
+# dev publishes only to GitLab — GitHub requires protected vars
 'publish:npm:dev:github':
-  rules:
-    - when: never
-
-publish:jsr:dev:
   rules:
     - when: never
 
