@@ -11,15 +11,15 @@ stages:
   - publish
 
 include:
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/pre-commit@0.6.0
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/security@0.6.0
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@0.10.0
+  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/pre-commit@0.12.1
+  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/security@0.12.1
+  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/npm-publish@0.12.1
     inputs:
       scope: "@chromagoth"
       registry: gitlab
       registry_uri: $CI_SERVER_HOST/api/v4/projects/$CI_PROJECT_ID/packages/npm/
       token: $CI_JOB_TOKEN
-  - component: $CI_SERVER_FQDN/patrick.pfenning.92/ci-templates/npm-publish@0.10.0
+  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/npm-publish@0.12.1
     inputs:
       scope: "@chromagoth"
       registry: github
