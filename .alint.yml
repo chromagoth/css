@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/asamarts/alint/main/schemas/v1/config.json
+version: 1
+
+extends:
+  - alint://bundled/hygiene/no-tracked-artifacts@v1
+  - alint://bundled/hygiene/lockfiles@v1
+  - alint://bundled/agent-hygiene@v1
+  - alint://bundled/agent-context@v1
+  # renovate: datasource=gitlab-tags depName=ptrck-sh/templates/project-template-default
+  - https://gitlab.com/ptrck-sh/templates/project-template-default/-/raw/1.1.1/.alint/base.yml#sha256-dd2c733ff2917c7576333dc35eeee140f9c0661d9aa6725aae783f07a30af690

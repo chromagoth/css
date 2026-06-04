@@ -5,7 +5,8 @@
     ":configMigration",
     ":pinDevDependencies",
     "abandonments:recommended",
-    ":disableDependencyDashboard"
+    ":disableDependencyDashboard",
+    "gitlab>ptrck-sh/templates/renovate-config"
   ],
   "reviewersFromCodeOwners": true
 }

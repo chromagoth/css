@@ -3,16 +3,12 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: never
     - when: always
-
 stages:
   - test
   - lint
   - build
   - publish
-
 include:
-  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/pre-commit@0.12.1
-  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/security@0.12.1
   - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/npm-publish@0.12.1
     inputs:
       scope: "@chromagoth"
@@ -25,11 +21,13 @@ include:
       registry: github
       registry_uri: npm.pkg.github.com/
       token: $GH_TOKEN_CLASSIC
+  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/pre-commit@0.19.0
+  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/security@0.19.0
+  - component: $CI_SERVER_FQDN/ptrck-sh/templates/ci-templates/alint-fix@0.19.0
 # dev publishes only to GitLab — GitHub requires protected vars
 'publish:npm:dev:github':
   rules:
     - when: never
-
 build:
   image:
     name: registry.gitlab.com/chromagoth/palettes:0.1.1
