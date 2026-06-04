@@ -1,0 +1,14 @@
+[env]
+# Add shared public environment variables and 1Password secret references here.
+# Secret references are resolved at runtime via op run.
+# For machine/developer-specific vars, copy mise.local.toml.example to mise.local.toml.
+
+[tools]
+pre-commit = "4.6.0"
+glab = "1.100.0"
+
+[hooks]
+enter = """
+pre-commit install --install-hooks 2>/dev/null || true
+[ -f mise.local.toml ] || cp mise.local.toml.example mise.local.toml
+"""
